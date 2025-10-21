@@ -1,0 +1,43 @@
+name: Neovim Config Validation
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+
+jobs:
+  validate_nvim:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+
+    steps:
+      - name: Install dependencies (Git, Lua, Neovim)
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm git lua neovim
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Neovim config directory
+        run: |
+          mkdir -p ~/.config/nvim
+          cp -r ./* ~/.config/nvim/
+
+      - name: Check Lua syntax
+        run: |
+          echo "✅ Checking Lua syntax..."
+          find ~/.config/nvim -name "*.lua" -print0 | xargs -0 -n1 lua -p
+
+      - name: Install plugins using Lazy.nvim
+        run: |
+          echo "📦 Installing plugins via Lazy.nvim..."
+          nvim --headless "+Lazy! sync" +qa
+
+      - name: Verify Neovim loads cleanly
+        run: |
+          echo "✅ Validating full Neovim config..."
+          nvim --headless +quit
+
