@@ -40,3 +40,9 @@ vim.opt.ttyfast = true
 vim.opt.redrawtime = 1000
 -- vim.opt.lazyredraw = true
 vim.opt.incsearch = true
+
+vim.opt.guicursor = {
+  "n-v-c:block",     -- block cursor in normal/visual/command modes
+  "i-ci:ver25",      -- vertical beam in insert
+  "r-cr:hor20"       -- optional: horizontal cursor in replace modes
+}
