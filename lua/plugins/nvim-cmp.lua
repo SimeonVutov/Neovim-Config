@@ -6,7 +6,7 @@ return {
         "hrsh7th/cmp-path", -- source for file system paths
         {
             "L3MON4D3/LuaSnip",
-            version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+            event='InsertEnter',
         },
         "saadparwaiz1/cmp_luasnip", -- for autocompletion
         "rafamadriz/friendly-snippets", -- useful snippets
