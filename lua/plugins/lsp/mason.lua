@@ -18,15 +18,16 @@ return {
                 },
             },
         })
-
-        mason_tool_installer.setup({
-            ensure_installed = {
-                "stylua",    -- lua formatter
-                "eslint_d",  -- js linter
-                "prettier",  -- js/html/css formatter
-                "isort",     -- python import sorter
-                "flake8",    -- python linter
-            },
-        })
+        
+        vim.defer_fn(function()
+            mason_tool_installer.setup({
+                ensure_installed = {
+                    "stylua",
+                    "eslint_d",
+                    "prettier",
+                    "isort",
+                },
+            })
+        end, 5000)
     end,
 }

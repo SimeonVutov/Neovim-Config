@@ -3,8 +3,6 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
         "hrsh7th/cmp-nvim-lsp",
-        { "antosha417/nvim-lsp-file-operations", config = true },
-        { "folke/neodev.nvim", opts = {} },
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
     },
@@ -76,9 +74,6 @@ return {
             html = { filetypes = { "html", "twig", "hbs" } },
             cssls = {},
             
-            -- =======================================================
-            -- C/C++ CONFIG (Tailored for Arch Linux + GCC + Project Aware)
-            -- =======================================================
             clangd = {
                 cmd = {
                     "clangd",
@@ -118,7 +113,7 @@ return {
             lua_ls = {
                 settings = {
                     Lua = {
-                        diagnostics = { globals = { "vim" } },
+                        diagnostics = { },
                         completion = { callSnippet = "Replace" },
                     },
                 },
