@@ -1,25 +1,22 @@
 return {
     "neovim/nvim-lspconfig",
-    enabled=false,
-    event = { "BufReadPost", "BufNewFile" },
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
         "hrsh7th/cmp-nvim-lsp",
         { "antosha417/nvim-lsp-file-operations", config = true },
         { "folke/neodev.nvim", opts = {} },
+        "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
     },
     config = function()
-        -- import lspconfig plugin
         local lspconfig = require("lspconfig")
-
-        -- import mason_lspconfig plugin
         local mason_lspconfig = require("mason-lspconfig")
-
-        local keymap = vim.keymap -- for conciseness
+        local cmp_nvim_lsp = require("cmp_nvim_lsp")
+        local keymap = vim.keymap
 
         vim.api.nvim_create_autocmd("LspAttach", {
             group = vim.api.nvim_create_augroup("UserLspConfig", {}),
             callback = function(ev)
-                -- Buffer local mappings.
                 -- See `:help vim.lsp.*` for documentation on any of the below functions
                 local opts = { buffer = ev.buf, silent = true }
 
@@ -67,44 +64,80 @@ return {
 
         -- used to enable autocompletion (assign to every lsp server config)
         local capabilities = vim.lsp.protocol.make_client_capabilities()
-        capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-        capabilities.textDocument.completion.completionItem.snippetSupport = true
+        capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
 
         local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
         for type, icon in pairs(signs) do
             local hl = "DiagnosticSign" .. type
             vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
         end
+        
+        local servers = {
+            html = { filetypes = { "html", "twig", "hbs" } },
+            cssls = {},
+            
+            -- =======================================================
+            -- C/C++ CONFIG (Tailored for Arch Linux + GCC + Project Aware)
+            -- =======================================================
+            clangd = {
+                cmd = {
+                    "clangd",
+                    "--background-index",        -- Index your project in the background (Essential for "Project Aware")
+                    "--clang-tidy",              -- Enable built-in linter
+                    "--header-insertion=iwyu",   -- "Include What You Use" (auto-imports headers)
+                    "--completion-style=detailed",
+                    "--function-arg-placeholders",
+                    "--fallback-style=llvm",
+                    "--offset-encoding=utf-16",  -- Fixes "offset encoding" errors common in Neovim
+                    -- CRITICAL: Tells clangd to ask your GCC where the system headers are
+                    "--query-driver=/usr/bin/gcc,/usr/bin/g++", 
+                },
+                -- Clangd looks for these files to determine where the "Root" of your project is
+                root_dir = lspconfig.util.root_pattern(
+                    "compile_commands.json", -- If you use Bear/CMake
+                    "compile_flags.txt",     -- If you use the manual text file method
+                    ".git"                   -- Fallback to git root
+                ),
+            },
+            
+            -- Python
+            pyright = {},
+        -- Java
+            jdtls = {}, 
 
-        mason_lspconfig.setup_handlers({
-            -- default handler for installed servers
-            function(server_name)
-                lspconfig[server_name].setup({
-                    capabilities = capabilities,
-                })
-            end,
-
-            ["emmet_ls"] = function()
-                lspconfig["emmet_ls"].setup({
-                    capabilities = capabilities,
-                    filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss" },
-                })
-            end,
-            ["lua_ls"] = function()
-                lspconfig["lua_ls"].setup({
-                    capabilities = capabilities,
-                    settings = {
-                        Lua = {
-                            diagnostics = {
-                                globals = { "vim" },
-                            },
-                            completion = {
-                                callSnippet = "Replace",
-                            },
-                        },
+            -- TypeScript / JS
+            ts_ls = {},
+            eslint = {},
+            
+            -- Emmet (HTML/CSS completion)
+            emmet_ls = {
+                filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
+            },
+            
+            -- Lua (for configuring Neovim)
+            lua_ls = {
+                settings = {
+                    Lua = {
+                        diagnostics = { globals = { "vim" } },
+                        completion = { callSnippet = "Replace" },
                     },
-                })
-            end,
+                },
+            },
+        }
+
+        mason_lspconfig.setup({
+            ensure_installed = vim.tbl_keys(servers),
+        })
+
+        mason_lspconfig.setup({
+            ensure_installed = vim.tbl_keys(servers),
+            handlers = {
+                function(server_name)
+                    local server = servers[server_name] or {}
+                    server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+                    lspconfig[server_name].setup(server)
+                end,
+            },
         })
     end,
 }
