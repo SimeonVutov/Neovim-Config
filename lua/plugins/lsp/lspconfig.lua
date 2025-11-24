@@ -57,6 +57,9 @@ return {
 
                     opts.desc = "Restart LSP"
                     keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
+
+                    opts.desc = "Show workspace diagnostics"
+                    keymap.set("n", "<leader>dw", "<cmd>Telescope diagnostics<CR>", opts)
                 end,
             })
 
