@@ -24,8 +24,6 @@ return {
                 ensure_installed = {
                     "stylua",
                     "eslint_d",
-                    "prettier",
-                    "isort",
                 },
             })
         end, 5000)
