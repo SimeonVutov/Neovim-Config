@@ -1,7 +1,7 @@
 vim.opt.guicursor = ""
 
 vim.opt.nu = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = true 
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
@@ -26,13 +26,17 @@ vim.opt.scrolloff = 9
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
-vim.opt.updatetime = 50
-
-vim.g.mapleader = " "
+vim.opt.updatetime = 90
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
 -- disable netrw
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
+
+-- For perfomance
+vim.opt.ttyfast = true
+vim.opt.redrawtime = 1000
+vim.opt.lazyredraw = false
+vim.opt.incsearch = true
