@@ -17,10 +17,6 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
     { import = "plugins.lsp" },
-    -- { import = "plugins.debugging" },
-  },
-  defaults = {
-    lazy = false,
   },
   checker = {
     enabled = true,
