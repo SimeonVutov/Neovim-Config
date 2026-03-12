@@ -28,7 +28,8 @@ return {
                     --opts = {},
                     cmd = "Neotree",
                     keys = {
-                        { "<leader>nt", "<cmd>Neotree reveal<CR>", desc = "Toggle File Explorer" },
+                        { "<leader>nt", "<cmd>Neotree reveal<CR>", desc = "Reveal File Explorer" },
+                        { "<leader>e", "<cmd>Neotree toggle<CR>", desc = "Toggle NeoTree" },
                     },
                     -- This init function checks if we opened nvim with a directory (nvim .)
                     -- If so, it loads neo-tree immediately.
@@ -354,8 +355,6 @@ return {
                     },
                 },
             })
-
-            vim.keymap.set("n", "<leader>e", "<Cmd>Neotree reveal<CR>")
         end,
     },
 }
