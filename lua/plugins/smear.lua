@@ -22,6 +22,6 @@ return {
         -- stiffness = 2,
         -- never_draw_over_target = true,
         --
-        stiffness = 0.5,
+        stiffness = 0.8,
     },
 }
