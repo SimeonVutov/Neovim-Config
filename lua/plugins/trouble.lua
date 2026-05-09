@@ -1,13 +1,41 @@
 return {
     "folke/trouble.nvim",
-    enabled=false,
+    enabled = true,
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    event = 'VeryLazy',
+    cmd = "Trouble",
     keys = {
-        { "<leader>xx", "<cmd>TroubleToggle<CR>", desc = "Open/close trouble list" },
-        { "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<CR>", desc = "Open trouble workspace diagnostics" },
-        { "<leader>xd", "<cmd>TroubleToggle document_diagnostics<CR>", desc = "Open trouble document diagnostics" },
-        { "<leader>xq", "<cmd>TroubleToggle quickfix<CR>", desc = "Open trouble quickfix list" },
-        { "<leader>xl", "<cmd>TroubleToggle loclist<CR>", desc = "Open trouble location list" },
-    }
+        {
+            "<leader>xx",
+            "<cmd>Trouble diagnostics toggle<CR>",
+            desc = "Trouble: workspace diagnostics",
+        },
+        {
+            "<leader>xX",
+            "<cmd>Trouble diagnostics toggle filter.buf=0<CR>",
+            desc = "Trouble: buffer diagnostics",
+        },
+        {
+            "<leader>xq",
+            "<cmd>Trouble qflist toggle<CR>",
+            desc = "Trouble: quickfix list",
+        },
+        {
+            "<leader>xl",
+            "<cmd>Trouble loclist toggle<CR>",
+            desc = "Trouble: location list",
+        },
+        {
+            "<leader>cs",
+            "<cmd>Trouble symbols toggle focus=false<CR>",
+            desc = "Trouble: document symbols",
+        },
+        {
+            "<leader>cl",
+            "<cmd>Trouble lsp toggle focus=false win.position=right<CR>",
+            desc = "Trouble: LSP definitions/references",
+        },
+    },
+    opts = {
+        focus = true,
+    },
 }
