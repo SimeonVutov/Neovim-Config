@@ -24,6 +24,9 @@ return {
                 ensure_installed = {
                     "stylua",
                     "eslint_d",
+                    "pyright",
+                    "ruff",
+                    "debugpy"
                 },
             })
         end, 5000)

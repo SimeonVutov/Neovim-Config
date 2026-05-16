@@ -36,7 +36,7 @@ return {
         -- This tells Mason to install 'codelldb' (for C/C++) and 'python' (debugpy)
         -- 'handlers = {}' tells it to automatically set up the adapters for us.
         mason_dap.setup({
-            ensure_installed = { "codelldb" },
+            ensure_installed = { "codelldb", "python" },
             handlers = {}, 
         })
 
@@ -63,5 +63,21 @@ return {
         -- Apply the same config to C and Rust
         dap.configurations.c = dap.configurations.cpp
         dap.configurations.rust = dap.configurations.cpp
+
+        dap.configurations.python = {
+            {
+                type = "python",
+                request = "launch",
+                name = "Launch current Python file",
+                program = "${file}",
+                pythonPath = function()
+                    local venv = os.getenv("VIRTUAL_ENV")
+                    if venv then
+                        return venv .. "/bin/python"
+                    end
+                    return "python3"
+                end,
+            },
+        }
     end,
 }

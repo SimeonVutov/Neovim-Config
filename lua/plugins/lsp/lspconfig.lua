@@ -98,7 +98,19 @@ return {
                         ".git"
                     ),
                 },
-                pyright = {},
+                pyright = {
+                    settings = {
+                        python = {
+                            analysis = {
+                                typeCheckingMode = "basic",
+                                autoSearchPaths = true,
+                                useLibraryCodeForTypes = true,
+                                diagnosticMode = "workspace",
+                            },
+                        },
+                    },
+                },
+                ruff = {},
                 jdtls = {},
                 ts_ls = {},
                 eslint = {},
